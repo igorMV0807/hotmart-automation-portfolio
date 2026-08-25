@@ -1,0 +1,1139 @@
+{
+  "name": "[PORTFOLIO — DISABLED] Hotmart Recovery Engine",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 5
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1200,
+        0
+      ],
+      "id": "d88a80c9-332f-42b3-958c-62074a48beb0",
+      "name": "Gatilho de agendamento",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "useCustomSchema": false,
+        "resource": "row",
+        "operation": "getAll",
+        "tableId": "purchase_journeys",
+        "returnAll": true,
+        "orderBy": "last_event_created_at.asc",
+        "filterType": "manual",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "recovery_allowed",
+              "condition": "eq",
+              "keyValue": "={{ true }}"
+            },
+            {
+              "keyName": "recovered",
+              "condition": "eq",
+              "keyValue": "={{ false }}"
+            },
+            {
+              "keyName": "last_step_sent",
+              "condition": "lt",
+              "keyValue": "3"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -980,
+        0
+      ],
+      "id": "41ae9dff-2c76-4727-a8de-e6488ff9f36b",
+      "name": "Buscar Jornadas Recuperáveis",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "d0b41dee-0802-420d-b758-004a6d30928f",
+              "leftValue": "={{\n  $json.next_step_at === null ||\n  $json.next_step_at === undefined ||\n  new Date($json.next_step_at).getTime() <= Date.now()\n}}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": false,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -740,
+        0
+      ],
+      "id": "1ed3bfee-2420-4f77-97cf-39590a7194dd",
+      "name": "Está na Hora de Recuperar?",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "mode": "rules",
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "7d63145b-a0b4-45ae-b382-07b6879c4155",
+                    "leftValue": "={{ Number($json.last_step_sent || 0) }}",
+                    "rightValue": "={{ 0 }}",
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "ETAPA 1"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "72d803a2-583c-427d-8286-f96b51c71145",
+                    "leftValue": "={{ Number($json.last_step_sent || 0) }}",
+                    "rightValue": "={{ 1 }}",
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "ETAPA 2"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "d119c08b-0aa7-483f-847c-0e25b9360c9d",
+                    "leftValue": "={{ Number($json.last_step_sent || 0) }}",
+                    "rightValue": "={{ 2 }}",
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "ETAPA 3"
+            }
+          ]
+        },
+        "looseTypeValidation": false,
+        "options": {
+          "fallbackOutput": "none"
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -500,
+        0
+      ],
+      "id": "ddf28642-b3c6-4710-bfdf-9397db1462f6",
+      "name": "Qual etapa Enviar?",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "useCustomSchema": false,
+        "resource": "row",
+        "operation": "getAll",
+        "tableId": "recovery_email_logs",
+        "returnAll": false,
+        "limit": 1,
+        "orderBy": "",
+        "filterType": "manual",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "journey_id",
+              "condition": "eq",
+              "keyValue": "={{ $('Qual etapa Enviar?').item.json.id }}"
+            },
+            {
+              "keyName": "recovery_flow",
+              "condition": "eq",
+              "keyValue": "={{ $('Qual etapa Enviar?').item.json.recovery_flow }}"
+            },
+            {
+              "keyName": "step",
+              "condition": "eq",
+              "keyValue": "={{ 1 }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -240,
+        -500
+      ],
+      "id": "f5560697-feb9-45e5-84f6-da249e4cfb40",
+      "name": "Buscar Envio Existente - Etapa 1",
+      "alwaysOutputData": true,
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "22be5ccd-bc0f-4ac1-a44e-d9d4be15585f",
+              "leftValue": "={{ $json.id !== undefined && $json.id !== null }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": false,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        0,
+        -500
+      ],
+      "id": "67cfa775-3dc0-40ef-bbe5-c162a5e5f1ec",
+      "name": "Etapa 1 já foi enviada?",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "mode": "manual",
+        "duplicateItem": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f85a075b-268a-4781-84ad-62b1d126570d",
+              "name": "email_subject",
+              "value": "={{ ({\"ABANDONED\": \"Você ainda pode concluir sua compra\", \"WAITING_PAYMENT\": \"Seu pagamento ainda está pendente\", \"CANCELED\": \"Ainda dá para concluir sua compra\", \"DELAYED\": \"Há uma pendência no seu pagamento\", \"EXPIRED\": \"Seu pagamento expirou, mas você ainda pode tentar novamente\"})[String($('Qual etapa Enviar?').item.json.recovery_flow || '').trim().toUpperCase()] || 'Você ainda pode concluir sua compra' }}",
+              "type": "string"
+            },
+            {
+              "id": "44bd95ac-8e5a-473e-94b1-d17e77bd805c",
+              "name": "email_body",
+              "value": "={{ 'Olá ' + ($('Qual etapa Enviar?').item.json.buyer_name || 'cliente') + ', ' + (({\"ABANDONED\": \"você deixou sua compra pela metade. Se ainda quiser concluir seu pedido, volte à página onde iniciou a compra e finalize o pagamento. Se tiver alguma dúvida, responda este e-mail.\", \"WAITING_PAYMENT\": \"vimos que sua compra ainda está aguardando pagamento. Se você ainda deseja concluir seu pedido, acesse novamente a página de pagamento. Em caso de dúvida, responda este e-mail.\", \"CANCELED\": \"não conseguimos concluir sua compra anteriormente. Se ainda tiver interesse, você pode tentar novamente pela página onde iniciou o pedido. Se precisar de ajuda, responda este e-mail.\", \"DELAYED\": \"identificamos que ainda existe uma pendência no pagamento do seu pedido. Confira a forma de pagamento utilizada e, se necessário, tente novamente. Se precisar de ajuda, responda este e-mail.\", \"EXPIRED\": \"o pagamento anterior expirou. Se ainda quiser concluir sua compra, volte à página onde iniciou o pedido e gere uma nova tentativa de pagamento. Se precisar, responda este e-mail.\"})[String($('Qual etapa Enviar?').item.json.recovery_flow || '').trim().toUpperCase()] || 'sua compra ainda não foi concluída. Se ainda quiser concluir o pedido, volte à página onde iniciou a compra. Se precisar de ajuda, responda este e-mail.') }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": false,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        260,
+        -420
+      ],
+      "id": "ca4524a4-0d19-4c87-84b7-a54fbebdf503",
+      "name": "Preparar E-mail - Etapa 1",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "sendTo": "={{ $('Qual etapa Enviar?').item.json.buyer_email }}",
+        "subject": "={{ $('Preparar E-mail - Etapa 1').item.json.email_subject }}",
+        "emailType": "text",
+        "message": "={{ $('Preparar E-mail - Etapa 1').item.json.email_body }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        500,
+        -420
+      ],
+      "id": "5546206a-4b38-47db-b085-4db5d7106fde",
+      "name": "Enviar e-mail - Etapa 1",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "useCustomSchema": false,
+        "resource": "row",
+        "operation": "create",
+        "tableId": "recovery_email_logs",
+        "dataToSend": "defineBelow",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "journey_id",
+              "fieldValue": "={{ $('Qual etapa Enviar?').item.json.id }}"
+            },
+            {
+              "fieldId": "recovery_flow",
+              "fieldValue": "={{ $('Qual etapa Enviar?').item.json.recovery_flow }}"
+            },
+            {
+              "fieldId": "step",
+              "fieldValue": "={{ 1 }}"
+            },
+            {
+              "fieldId": "buyer_email",
+              "fieldValue": "={{ $('Qual etapa Enviar?').item.json.buyer_email }}"
+            },
+            {
+              "fieldId": "subject",
+              "fieldValue": "={{ $('Preparar E-mail - Etapa 1').item.json.email_subject }}"
+            },
+            {
+              "fieldId": "gmail_message_id",
+              "fieldValue": "={{ $('Enviar e-mail - Etapa 1').item.json.id }}"
+            },
+            {
+              "fieldId": "status",
+              "fieldValue": "SENT"
+            },
+            {
+              "fieldId": "sent_at",
+              "fieldValue": "={{ $now.toISO() }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        740,
+        -420
+      ],
+      "id": "1e851641-49f3-4c57-8fac-692e4efe5709",
+      "name": "Registrar Envio - Etapa 1",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "useCustomSchema": false,
+        "resource": "row",
+        "operation": "update",
+        "tableId": "purchase_journeys",
+        "filterType": "manual",
+        "matchType": "anyFilter",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $('Qual etapa Enviar?').item.json.id }}"
+            }
+          ]
+        },
+        "dataToSend": "defineBelow",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "last_step_sent",
+              "fieldValue": "={{ 1 }}"
+            },
+            {
+              "fieldId": "next_step_at",
+              "fieldValue": "={{ $now.setZone('America/Sao_Paulo').plus({ days: 1 }).set({ hour: 10, minute: 0, second: 0, millisecond: 0 }).toISO() }}"
+            },
+            {
+              "fieldId": "updated_at",
+              "fieldValue": "={{ $now.toISO() }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        980,
+        -500
+      ],
+      "id": "a03264b7-ea8e-4521-bc74-7af99ffb8333",
+      "name": "Atualizar Jornada - Etapa 1",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "useCustomSchema": false,
+        "resource": "row",
+        "operation": "getAll",
+        "tableId": "recovery_email_logs",
+        "returnAll": false,
+        "limit": 1,
+        "orderBy": "",
+        "filterType": "manual",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "journey_id",
+              "condition": "eq",
+              "keyValue": "={{ $('Qual etapa Enviar?').item.json.id }}"
+            },
+            {
+              "keyName": "recovery_flow",
+              "condition": "eq",
+              "keyValue": "={{ $('Qual etapa Enviar?').item.json.recovery_flow }}"
+            },
+            {
+              "keyName": "step",
+              "condition": "eq",
+              "keyValue": "={{ 2 }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -240,
+        0
+      ],
+      "id": "b203cf1b-7781-42d0-9fec-ed0051ab36fc",
+      "name": "Buscar Envio Existente - Etapa 2",
+      "alwaysOutputData": true,
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "70ace3e7-e920-4a70-8ab1-7ff6300cf264",
+              "leftValue": "={{ $json.id !== undefined && $json.id !== null }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": false,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        0,
+        0
+      ],
+      "id": "519277a8-e917-441b-906b-5af03def7bf0",
+      "name": "Etapa 2 já foi enviada?",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "mode": "manual",
+        "duplicateItem": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fdf51d52-314b-4b8a-a529-afa5c6281802",
+              "name": "email_subject",
+              "value": "={{ ({\"ABANDONED\": \"Sua compra continua disponível\", \"WAITING_PAYMENT\": \"Lembrete: seu pagamento continua pendente\", \"CANCELED\": \"Quer tentar concluir sua compra novamente?\", \"DELAYED\": \"Seu pedido ainda precisa de atenção\", \"EXPIRED\": \"Você pode fazer uma nova tentativa de pagamento\"})[String($('Qual etapa Enviar?').item.json.recovery_flow || '').trim().toUpperCase()] || 'Você ainda pode concluir sua compra' }}",
+              "type": "string"
+            },
+            {
+              "id": "9eb17fc6-75f9-4903-985e-ee06ca4cf7f8",
+              "name": "email_body",
+              "value": "={{ 'Olá ' + ($('Qual etapa Enviar?').item.json.buyer_name || 'cliente') + ', ' + (({\"ABANDONED\": \"passando para lembrar que sua compra ainda não foi concluída. Se ainda quiser o produto, volte à página onde iniciou o pedido e finalize quando puder. Se tiver alguma dúvida, responda este e-mail.\", \"WAITING_PAYMENT\": \"seu pedido continua aguardando pagamento. Se você ainda quiser concluir a compra, revise o pagamento ou faça uma nova tentativa pela página do pedido. Se precisar de ajuda, responda este e-mail.\", \"CANCELED\": \"sua tentativa anterior não foi concluída. Se ainda quiser comprar, tente novamente pela página do pedido. Se algo estiver impedindo a conclusão, responda este e-mail.\", \"DELAYED\": \"seu pagamento ainda aparece com pendência. Vale conferir se a forma de pagamento foi concluída corretamente. Se precisar de ajuda, responda este e-mail.\", \"EXPIRED\": \"como o pagamento anterior expirou, será necessário fazer uma nova tentativa se ainda quiser concluir a compra. Volte à página do pedido e tente novamente.\"})[String($('Qual etapa Enviar?').item.json.recovery_flow || '').trim().toUpperCase()] || 'sua compra ainda não foi concluída. Se ainda quiser concluir o pedido, volte à página onde iniciou a compra. Se precisar de ajuda, responda este e-mail.') }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": false,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        260,
+        80
+      ],
+      "id": "d32182de-7071-4f4a-86b0-e527c56c5ae1",
+      "name": "Preparar E-mail - Etapa 2",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "sendTo": "={{ $('Qual etapa Enviar?').item.json.buyer_email }}",
+        "subject": "={{ $('Preparar E-mail - Etapa 2').item.json.email_subject }}",
+        "emailType": "text",
+        "message": "={{ $('Preparar E-mail - Etapa 2').item.json.email_body }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        500,
+        80
+      ],
+      "id": "63597111-75c5-4683-9f4c-7b28b931fc83",
+      "name": "Enviar e-mail - Etapa 2",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "useCustomSchema": false,
+        "resource": "row",
+        "operation": "create",
+        "tableId": "recovery_email_logs",
+        "dataToSend": "defineBelow",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "journey_id",
+              "fieldValue": "={{ $('Qual etapa Enviar?').item.json.id }}"
+            },
+            {
+              "fieldId": "recovery_flow",
+              "fieldValue": "={{ $('Qual etapa Enviar?').item.json.recovery_flow }}"
+            },
+            {
+              "fieldId": "step",
+              "fieldValue": "={{ 2 }}"
+            },
+            {
+              "fieldId": "buyer_email",
+              "fieldValue": "={{ $('Qual etapa Enviar?').item.json.buyer_email }}"
+            },
+            {
+              "fieldId": "subject",
+              "fieldValue": "={{ $('Preparar E-mail - Etapa 2').item.json.email_subject }}"
+            },
+            {
+              "fieldId": "gmail_message_id",
+              "fieldValue": "={{ $('Enviar e-mail - Etapa 2').item.json.id }}"
+            },
+            {
+              "fieldId": "status",
+              "fieldValue": "SENT"
+            },
+            {
+              "fieldId": "sent_at",
+              "fieldValue": "={{ $now.toISO() }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        740,
+        80
+      ],
+      "id": "57b40467-ab94-4190-929c-387150dc51cf",
+      "name": "Registrar Envio - Etapa 2",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "useCustomSchema": false,
+        "resource": "row",
+        "operation": "update",
+        "tableId": "purchase_journeys",
+        "filterType": "manual",
+        "matchType": "anyFilter",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $('Qual etapa Enviar?').item.json.id }}"
+            }
+          ]
+        },
+        "dataToSend": "defineBelow",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "last_step_sent",
+              "fieldValue": "={{ 2 }}"
+            },
+            {
+              "fieldId": "next_step_at",
+              "fieldValue": "={{ $now.setZone('America/Sao_Paulo').plus({ days: 1 }).set({ hour: 10, minute: 0, second: 0, millisecond: 0 }).toISO() }}"
+            },
+            {
+              "fieldId": "updated_at",
+              "fieldValue": "={{ $now.toISO() }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        980,
+        0
+      ],
+      "id": "871122a2-9443-4e29-91de-e45cce962073",
+      "name": "Atualizar Jornada - Etapa 2",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "useCustomSchema": false,
+        "resource": "row",
+        "operation": "getAll",
+        "tableId": "recovery_email_logs",
+        "returnAll": false,
+        "limit": 1,
+        "orderBy": "",
+        "filterType": "manual",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "journey_id",
+              "condition": "eq",
+              "keyValue": "={{ $('Qual etapa Enviar?').item.json.id }}"
+            },
+            {
+              "keyName": "recovery_flow",
+              "condition": "eq",
+              "keyValue": "={{ $('Qual etapa Enviar?').item.json.recovery_flow }}"
+            },
+            {
+              "keyName": "step",
+              "condition": "eq",
+              "keyValue": "={{ 3 }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -240,
+        500
+      ],
+      "id": "640e5b37-9c7b-46d0-a83b-d98ef2fe920e",
+      "name": "Buscar Envio Existente - Etapa 3",
+      "alwaysOutputData": true,
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "da151afd-4cad-492f-8ab7-9638d624592e",
+              "leftValue": "={{ $json.id !== undefined && $json.id !== null }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": false,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        0,
+        500
+      ],
+      "id": "ee59a0bf-35e2-4f0e-8a67-0632591cfce4",
+      "name": "Etapa 3 já foi enviada?",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "mode": "manual",
+        "duplicateItem": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "413c7716-f3e9-4a28-b8c9-9fe64fd2ea59",
+              "name": "email_subject",
+              "value": "={{ ({\"ABANDONED\": \"Último lembrete sobre sua compra\", \"WAITING_PAYMENT\": \"Último lembrete sobre o pagamento do seu pedido\", \"CANCELED\": \"Último lembrete para concluir sua compra\", \"DELAYED\": \"Último lembrete sobre a pendência do seu pedido\", \"EXPIRED\": \"Último lembrete para tentar o pagamento novamente\"})[String($('Qual etapa Enviar?').item.json.recovery_flow || '').trim().toUpperCase()] || 'Você ainda pode concluir sua compra' }}",
+              "type": "string"
+            },
+            {
+              "id": "8be770e4-af37-4ac8-beb5-a283215a3139",
+              "name": "email_body",
+              "value": "={{ 'Olá ' + ($('Qual etapa Enviar?').item.json.buyer_name || 'cliente') + ', ' + (({\"ABANDONED\": \"este é nosso último lembrete sobre a compra que ficou incompleta. Se ainda quiser concluir, volte à página onde iniciou o pedido. Se precisar de ajuda, basta responder este e-mail.\", \"WAITING_PAYMENT\": \"este é nosso último lembrete de que o pagamento do seu pedido ainda está pendente. Se quiser concluir a compra, revise o pagamento pela página do pedido.\", \"CANCELED\": \"este é nosso último lembrete. Sua compra anterior não foi concluída, mas você pode tentar novamente caso ainda tenha interesse.\", \"DELAYED\": \"este é nosso último lembrete sobre a pendência do seu pedido. Se ainda quiser concluir a compra, confira o pagamento e faça uma nova tentativa se necessário.\", \"EXPIRED\": \"este é nosso último lembrete. O pagamento anterior expirou; se ainda quiser concluir a compra, será necessário iniciar uma nova tentativa.\"})[String($('Qual etapa Enviar?').item.json.recovery_flow || '').trim().toUpperCase()] || 'sua compra ainda não foi concluída. Se ainda quiser concluir o pedido, volte à página onde iniciou a compra. Se precisar de ajuda, responda este e-mail.') }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": false,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        260,
+        580
+      ],
+      "id": "b16174f2-5729-487c-85e3-54cd9f71d2ba",
+      "name": "Preparar E-mail - Etapa 3",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "sendTo": "={{ $('Qual etapa Enviar?').item.json.buyer_email }}",
+        "subject": "={{ $('Preparar E-mail - Etapa 3').item.json.email_subject }}",
+        "emailType": "text",
+        "message": "={{ $('Preparar E-mail - Etapa 3').item.json.email_body }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        500,
+        580
+      ],
+      "id": "f88fcd09-d38a-4fa3-b9c4-5ecbe228dcb9",
+      "name": "Enviar e-mail - Etapa 3",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "useCustomSchema": false,
+        "resource": "row",
+        "operation": "create",
+        "tableId": "recovery_email_logs",
+        "dataToSend": "defineBelow",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "journey_id",
+              "fieldValue": "={{ $('Qual etapa Enviar?').item.json.id }}"
+            },
+            {
+              "fieldId": "recovery_flow",
+              "fieldValue": "={{ $('Qual etapa Enviar?').item.json.recovery_flow }}"
+            },
+            {
+              "fieldId": "step",
+              "fieldValue": "={{ 3 }}"
+            },
+            {
+              "fieldId": "buyer_email",
+              "fieldValue": "={{ $('Qual etapa Enviar?').item.json.buyer_email }}"
+            },
+            {
+              "fieldId": "subject",
+              "fieldValue": "={{ $('Preparar E-mail - Etapa 3').item.json.email_subject }}"
+            },
+            {
+              "fieldId": "gmail_message_id",
+              "fieldValue": "={{ $('Enviar e-mail - Etapa 3').item.json.id }}"
+            },
+            {
+              "fieldId": "status",
+              "fieldValue": "SENT"
+            },
+            {
+              "fieldId": "sent_at",
+              "fieldValue": "={{ $now.toISO() }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        740,
+        580
+      ],
+      "id": "9b6c1f8e-0d3d-4ba1-ba7e-388456d27598",
+      "name": "Registrar Envio - Etapa 3",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "useCustomSchema": false,
+        "resource": "row",
+        "operation": "update",
+        "tableId": "purchase_journeys",
+        "filterType": "manual",
+        "matchType": "anyFilter",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $('Qual etapa Enviar?').item.json.id }}"
+            }
+          ]
+        },
+        "dataToSend": "defineBelow",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "last_step_sent",
+              "fieldValue": "={{ 3 }}"
+            },
+            {
+              "fieldId": "next_step_at",
+              "fieldValue": "={{ null }}"
+            },
+            {
+              "fieldId": "updated_at",
+              "fieldValue": "={{ $now.toISO() }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        980,
+        500
+      ],
+      "id": "2fcd3081-6e67-4ce8-b646-2abcf89df82c",
+      "name": "Atualizar Jornada - Etapa 3",
+      "disabled": true
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Gatilho de agendamento": {
+      "main": [
+        [
+          {
+            "node": "Buscar Jornadas Recuperáveis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar Jornadas Recuperáveis": {
+      "main": [
+        [
+          {
+            "node": "Está na Hora de Recuperar?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Está na Hora de Recuperar?": {
+      "main": [
+        [
+          {
+            "node": "Qual etapa Enviar?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Qual etapa Enviar?": {
+      "main": [
+        [
+          {
+            "node": "Buscar Envio Existente - Etapa 1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Buscar Envio Existente - Etapa 2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Buscar Envio Existente - Etapa 3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar Envio Existente - Etapa 1": {
+      "main": [
+        [
+          {
+            "node": "Etapa 1 já foi enviada?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Etapa 1 já foi enviada?": {
+      "main": [
+        [
+          {
+            "node": "Atualizar Jornada - Etapa 1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Preparar E-mail - Etapa 1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparar E-mail - Etapa 1": {
+      "main": [
+        [
+          {
+            "node": "Enviar e-mail - Etapa 1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar e-mail - Etapa 1": {
+      "main": [
+        [
+          {
+            "node": "Registrar Envio - Etapa 1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Registrar Envio - Etapa 1": {
+      "main": [
+        [
+          {
+            "node": "Atualizar Jornada - Etapa 1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar Envio Existente - Etapa 2": {
+      "main": [
+        [
+          {
+            "node": "Etapa 2 já foi enviada?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Etapa 2 já foi enviada?": {
+      "main": [
+        [
+          {
+            "node": "Atualizar Jornada - Etapa 2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Preparar E-mail - Etapa 2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparar E-mail - Etapa 2": {
+      "main": [
+        [
+          {
+            "node": "Enviar e-mail - Etapa 2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar e-mail - Etapa 2": {
+      "main": [
+        [
+          {
+            "node": "Registrar Envio - Etapa 2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Registrar Envio - Etapa 2": {
+      "main": [
+        [
+          {
+            "node": "Atualizar Jornada - Etapa 2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar Envio Existente - Etapa 3": {
+      "main": [
+        [
+          {
+            "node": "Etapa 3 já foi enviada?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Etapa 3 já foi enviada?": {
+      "main": [
+        [
+          {
+            "node": "Atualizar Jornada - Etapa 3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Preparar E-mail - Etapa 3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparar E-mail - Etapa 3": {
+      "main": [
+        [
+          {
+            "node": "Enviar e-mail - Etapa 3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar e-mail - Etapa 3": {
+      "main": [
+        [
+          {
+            "node": "Registrar Envio - Etapa 3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Registrar Envio - Etapa 3": {
+      "main": [
+        [
+          {
+            "node": "Atualizar Jornada - Etapa 3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "America/Sao_Paulo"
+  },
+  "tags": []
+}

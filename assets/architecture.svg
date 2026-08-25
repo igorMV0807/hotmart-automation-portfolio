@@ -1,0 +1,120 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="800" viewBox="0 0 1400 800" role="img" aria-labelledby="title desc">
+  <title id="title">Verified architecture of the Hotmart Recovery Engine portfolio edition</title>
+  <desc id="desc">A five-minute schedule triggers a 22-node n8n recovery engine. It reads eligible journeys and send logs from Supabase, sends messages through Gmail, and writes delivery logs and journey state. A read-only Next.js dashboard reads Supabase in the original architecture, while the public edition uses synthetic data. Hotmart ingestion is shown as not supplied.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#07111f"/>
+      <stop offset="1" stop-color="#102a43"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#000" flood-opacity="0.28"/>
+    </filter>
+    <marker id="arrowTeal" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M0,0 L12,6 L0,12 z" fill="#5eead4"/>
+    </marker>
+    <marker id="arrowBlue" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M0,0 L12,6 L0,12 z" fill="#60a5fa"/>
+    </marker>
+    <marker id="arrowOrange" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M0,0 L12,6 L0,12 z" fill="#fb923c"/>
+    </marker>
+    <marker id="arrowPurple" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M0,0 L12,6 L0,12 z" fill="#c4b5fd"/>
+    </marker>
+    <style>
+      .title{font:700 31px Inter,Segoe UI,Arial,sans-serif;fill:#f8fafc}.subtitle{font:400 16px Inter,Segoe UI,Arial,sans-serif;fill:#a9c1d9}.label{font:700 19px Inter,Segoe UI,Arial,sans-serif;fill:#f8fafc}.body{font:400 14px Inter,Segoe UI,Arial,sans-serif;fill:#bdd0e2}.small{font:400 12px Inter,Segoe UI,Arial,sans-serif;fill:#93acc3}.badge{font:700 11px Inter,Segoe UI,Arial,sans-serif;letter-spacing:.08em}.node{fill:#102b43;stroke:#60a5fa;stroke-width:2}.engine{fill:#123a3a;stroke:#5eead4;stroke-width:2}.missing{fill:#3a2814;stroke:#fb923c;stroke-width:2;stroke-dasharray:10 8}.demo{fill:#29204a;stroke:#c4b5fd;stroke-width:2}.lineTeal{fill:none;stroke:#5eead4;stroke-width:3;marker-end:url(#arrowTeal)}.lineBlue{fill:none;stroke:#60a5fa;stroke-width:3;marker-end:url(#arrowBlue)}.lineOrange{fill:none;stroke:#fb923c;stroke-width:2.5;stroke-dasharray:10 8;marker-end:url(#arrowOrange)}.linePurple{fill:none;stroke:#c4b5fd;stroke-width:3;marker-end:url(#arrowPurple)}
+    </style>
+  </defs>
+
+  <rect width="1400" height="800" rx="28" fill="url(#background)"/>
+  <text x="64" y="62" class="title">Hotmart Recovery Engine — Verified Portfolio Architecture</text>
+  <text x="64" y="92" class="subtitle">Reviewed n8n workflow + read-only dashboard · production remained untouched</text>
+
+  <g transform="translate(850 120)">
+    <line x1="0" y1="0" x2="38" y2="0" stroke="#5eead4" stroke-width="3"/>
+    <text x="48" y="5" class="small">reviewed flow</text>
+    <line x1="160" y1="0" x2="198" y2="0" stroke="#fb923c" stroke-width="3" stroke-dasharray="9 7"/>
+    <text x="208" y="5" class="small">not supplied</text>
+    <line x1="310" y1="0" x2="348" y2="0" stroke="#c4b5fd" stroke-width="3"/>
+    <text x="358" y="5" class="small">public demo</text>
+  </g>
+
+  <path class="lineOrange" d="M240 220 H310"/>
+  <path class="lineOrange" d="M530 220 H610"/>
+  <path class="lineTeal" d="M240 505 H330"/>
+  <path class="lineBlue" d="M650 300 C620 345 600 390 565 425"/>
+  <path class="lineTeal" d="M580 470 C630 430 670 360 700 300"/>
+  <path class="lineTeal" d="M590 505 H690"/>
+  <path class="lineBlue" d="M860 220 H1010"/>
+  <path class="linePurple" d="M1150 485 V350"/>
+
+  <g filter="url(#shadow)">
+    <rect x="60" y="170" width="180" height="100" rx="18" class="missing"/>
+    <text x="150" y="212" text-anchor="middle" class="label">Hotmart</text>
+    <text x="150" y="239" text-anchor="middle" class="body">event source</text>
+    <text x="150" y="258" text-anchor="middle" class="badge" fill="#fed7aa">CONTEXT ONLY</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="310" y="160" width="220" height="120" rx="18" class="missing"/>
+    <text x="420" y="203" text-anchor="middle" class="label">Event ingestion</text>
+    <text x="420" y="230" text-anchor="middle" class="body">upstream workflow</text>
+    <text x="420" y="257" text-anchor="middle" class="badge" fill="#fed7aa">NOT SUPPLIED</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="610" y="145" width="250" height="155" rx="18" class="node"/>
+    <text x="735" y="185" text-anchor="middle" class="label">Supabase</text>
+    <text x="735" y="214" text-anchor="middle" class="body">purchase_journeys</text>
+    <text x="735" y="238" text-anchor="middle" class="body">recovery_email_logs</text>
+    <text x="735" y="262" text-anchor="middle" class="body">hotmart_events</text>
+    <text x="735" y="287" text-anchor="middle" class="badge" fill="#bfdbfe">VERIFIED TABLE USAGE</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="60" y="455" width="180" height="100" rx="18" class="engine"/>
+    <text x="150" y="496" text-anchor="middle" class="label">Schedule</text>
+    <text x="150" y="525" text-anchor="middle" class="body">every 5 minutes</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="330" y="405" width="260" height="180" rx="18" class="engine"/>
+    <text x="460" y="447" text-anchor="middle" class="label">n8n Recovery Engine</text>
+    <text x="460" y="478" text-anchor="middle" class="body">22 nodes · 3 stages</text>
+    <text x="460" y="503" text-anchor="middle" class="body">due-time + prior-send checks</text>
+    <text x="460" y="528" text-anchor="middle" class="body">message preparation</text>
+    <text x="460" y="558" text-anchor="middle" class="badge" fill="#99f6e4">PUBLIC EXPORT DISABLED</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="690" y="450" width="190" height="110" rx="18" class="node"/>
+    <text x="785" y="494" text-anchor="middle" class="label">Gmail</text>
+    <text x="785" y="522" text-anchor="middle" class="body">stage email delivery</text>
+    <text x="785" y="546" text-anchor="middle" class="badge" fill="#bfdbfe">NODES DISABLED</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="1010" y="150" width="300" height="200" rx="18" class="node"/>
+    <text x="1160" y="192" text-anchor="middle" class="label">Next.js Dashboard</text>
+    <text x="1160" y="224" text-anchor="middle" class="body">read-only metrics</text>
+    <text x="1160" y="249" text-anchor="middle" class="body">journeys · emails · events</text>
+    <text x="1160" y="274" text-anchor="middle" class="body">timeline · stage · flow</text>
+    <text x="1160" y="305" text-anchor="middle" class="badge" fill="#bfdbfe">SOURCE REVIEWED</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="1010" y="485" width="300" height="125" rx="18" class="demo"/>
+    <text x="1160" y="529" text-anchor="middle" class="label">Synthetic demo data</text>
+    <text x="1160" y="558" text-anchor="middle" class="body">example.com + DEMO-* records</text>
+    <text x="1160" y="588" text-anchor="middle" class="badge" fill="#ddd6fe">PUBLIC DEFAULT · NO EXTERNAL CALLS</text>
+  </g>
+
+  <text x="580" y="345" class="small">read eligible journeys + send log</text>
+  <text x="620" y="407" class="small">write send log + update journey</text>
+  <text x="617" y="492" class="small">send</text>
+  <text x="900" y="207" class="small">read-only</text>
+
+  <rect x="60" y="675" width="1280" height="75" rx="16" fill="#0b1c2c" stroke="#24435e"/>
+  <text x="84" y="706" class="body">Evidence boundary: upstream ingestion, database migrations/RLS, Postman/Newman reports, Railway topology, and business metrics were not supplied.</text>
+  <text x="84" y="731" class="small">The public dashboard uses synthetic data; the public workflow is inactive and all nodes are disabled.</text>
+</svg>

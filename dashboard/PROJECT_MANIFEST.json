@@ -1,0 +1,17 @@
+{
+  "project": "Hotmart Recovery Dashboard",
+  "framework": "Next.js + TypeScript + Tailwind + Recharts + Supabase",
+  "mode": "synthetic portfolio demo by default; optional read-only sandbox adapter",
+  "tables": [
+    "purchase_journeys",
+    "recovery_email_logs",
+    "hotmart_events"
+  ],
+  "security": "No external connection in demo mode; Supabase Auth + server-only service role only in separately reviewed sandbox mode",
+  "notes": [
+    "Synthetic demo mode is enabled by default.",
+    "No external credentials are included.",
+    "No email open/click metrics are fabricated.",
+    "Recovered flow is inferred from the latest SENT log before approval."
+  ]
+}
