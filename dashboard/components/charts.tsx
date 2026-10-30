@@ -45,6 +45,7 @@ export function RevenueLineChart({
             stroke="currentColor"
             strokeWidth={3}
             dot={false}
+            isAnimationActive={false}
           />
         </LineChart>
       </ResponsiveContainer>
@@ -69,7 +70,12 @@ export function StepBarChart({
           <XAxis dataKey="step" tick={{ fontSize: 12 }} />
           <YAxis allowDecimals={false} tick={{ fontSize: 12 }} />
           <Tooltip />
-          <Bar dataKey="recovered" fill="currentColor" radius={[8, 8, 0, 0]} />
+          <Bar
+            dataKey="recovered"
+            fill="currentColor"
+            radius={[8, 8, 0, 0]}
+            isAnimationActive={false}
+          />
         </BarChart>
       </ResponsiveContainer>
     </div>

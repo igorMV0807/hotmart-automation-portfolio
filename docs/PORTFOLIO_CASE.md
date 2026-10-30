@@ -2,7 +2,7 @@
 
 ## English version
 
-### Hotmart Recovery Engine
+### Central de Performance
 
 **A three-stage purchase-recovery workflow with duplicate-send checks, state tracking, and a read-only observability dashboard.**
 
@@ -39,7 +39,7 @@ Building automation that can be explained and observed is as important as buildi
 
 ## Versão em português
 
-### Motor de Recuperação Hotmart
+### Central de Performance
 
 **Workflow de recuperação de compras em três etapas, com proteção contra repetição de envio, controle de estado e dashboard de observabilidade.**
 

@@ -1,6 +1,6 @@
-# Hotmart Recovery Dashboard — Synthetic Portfolio Demo
+# Central de Performance — Synthetic Portfolio Demo
 
-This Next.js dashboard is the public companion to the sanitized n8n workflow. It starts in a synthetic, disconnected mode and does not require Supabase, Gmail, Hotmart, or any other external account.
+Central de Performance is the public Next.js companion to the sanitized n8n workflow. It starts in a synthetic, disconnected mode and does not require Supabase, Gmail, Hotmart, or any other external account.
 
 ## Safe default
 

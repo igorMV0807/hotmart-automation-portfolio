@@ -30,7 +30,7 @@ export function Sidebar({
             <ShoppingBag size={20} />
           </div>
           <div>
-            <div className="text-sm font-semibold">Hotmart Recovery</div>
+            <div className="text-sm font-semibold">Central de Performance</div>
             <div className="text-xs text-slate-400">Dashboard</div>
           </div>
         </Link>

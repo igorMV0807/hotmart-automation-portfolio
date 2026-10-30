@@ -8,7 +8,7 @@ A demo mais segura mostra o dashboard sintético e o workflow n8n desativado. El
 
 | Tempo | Visual | Narração |
 |---:|---|---|
-| 0–8s | Título e diagrama | “Eu construí um motor automatizado de recuperação de compras com n8n, Supabase, Gmail e um dashboard em Next.js.” |
+| 0–8s | Título e diagrama | “Eu construí a Central de Performance, um sistema automatizado de recuperação de compras com n8n, Supabase, Gmail e um dashboard em Next.js.” |
 | 8–22s | Visão geral do workflow n8n, sem executar | “A cada cinco minutos, o workflow procura jornadas elegíveis e verifica se chegou o momento da próxima ação.” |
 | 22–36s | Mostrar o switch e os três ramos | “O sistema escolhe uma de três etapas e, antes do envio, procura um registro com a mesma jornada, fluxo e etapa para evitar repetição.” |
 | 36–47s | Mostrar nodes de preparação, Gmail e atualização | “A mensagem muda conforme o status da compra. Depois, o envio é registrado e a jornada avança para a próxima etapa.” |
@@ -20,7 +20,7 @@ A demo mais segura mostra o dashboard sintético e o workflow n8n desativado. El
 
 | Time | Visual | Voice-over |
 |---:|---|---|
-| 0–8s | Title and architecture | “I built an automated purchase-recovery engine with n8n, Supabase, Gmail, and a Next.js dashboard.” |
+| 0–8s | Title and architecture | “I built Central de Performance, an automated purchase-recovery system with n8n, Supabase, Gmail, and a Next.js dashboard.” |
 | 8–22s | Full disabled n8n workflow | “Every five minutes, the workflow looks for eligible journeys and checks whether the next action is due.” |
 | 22–36s | Switch plus three branches | “It selects one of three stages and checks the journey, flow, and stage log before sending to prevent a repeated delivery.” |
 | 36–47s | Message, Gmail, and update nodes | “The message changes with the purchase state. The send is recorded, and the journey advances to its next step.” |

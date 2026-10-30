@@ -1,5 +1,5 @@
 {
-  "project": "Hotmart Recovery Dashboard",
+  "project": "Central de Performance",
   "framework": "Next.js + TypeScript + Tailwind + Recharts + Supabase",
   "mode": "synthetic portfolio demo by default; optional read-only sandbox adapter",
   "tables": [

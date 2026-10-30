@@ -1,8 +1,8 @@
-# Motor de Recuperação Hotmart — Edição de Portfólio
+# Central de Performance — Edição de Portfólio
 
 Português (Brasil) · [English](README.md)
 
-> Versão isolada e segura para publicação de um sistema automatizado de recuperação de compras. O projeto em execução não foi editado, reiniciado, republicado, consultado nem conectado durante a preparação deste repositório.
+> Versão isolada e segura para publicação da Central de Performance, um sistema automatizado de recuperação de compras e visibilidade operacional integrado aos eventos da Hotmart. O projeto em execução não foi editado, reiniciado, republicado, consultado nem conectado durante a preparação deste repositório.
 
 ## O que este projeto demonstra
 

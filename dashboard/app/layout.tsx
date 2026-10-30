@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Hotmart Recovery — Portfolio Demo",
-  description: "Demonstração pública com dados sintéticos de um dashboard de recuperação Hotmart",
+  title: "Central de Performance — Demo de Portfólio",
+  description:
+    "Demonstração pública com dados sintéticos de recuperação de compras, receita e eventos Hotmart",
 };
 
 export default function RootLayout({

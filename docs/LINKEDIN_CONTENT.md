@@ -2,7 +2,7 @@
 
 ## Post de lançamento — Português
 
-**Transformei um workflow complexo de recuperação Hotmart em um case público sem tocar no sistema em execução.**
+**Transformei um workflow complexo de recuperação Hotmart na Central de Performance, um case público sem tocar no sistema em execução.**
 
 O sistema possui 22 nodes no n8n e trabalha em três etapas.
 
@@ -27,7 +27,7 @@ Código e case completo: **https://github.com/igorMV0807/hotmart-automation-port
 
 ## Launch post — English
 
-**I turned a complex Hotmart recovery workflow into a public engineering case without touching the running system.**
+**I turned a complex recovery workflow for Hotmart purchases into Central de Performance, a public engineering case built without touching the running system.**
 
 The n8n workflow contains 22 nodes and a three-stage sequence.
 
@@ -59,7 +59,7 @@ Code and full case: **https://github.com/igorMV0807/hotmart-automation-portfolio
 | 3 | “Por que meu dashboard não mostra CTR” | Tela de emails + explicação de métricas não registradas |
 | 4 | “Como transformei produção em um case público seguro” | Comparação estrutural sem mostrar os arquivos originais |
 | 5 | “Um dashboard somente leitura para investigar eventos” | Tela sintética de eventos e erros |
-| 6 | “Arquitetura completa do motor de recuperação” | Diagrama revisado |
+| 6 | “Arquitetura completa da Central de Performance” | Diagrama revisado |
 
 ## Regras de publicação
 

@@ -63,7 +63,9 @@ function LoginForm() {
             <LockKeyhole size={22} />
           </div>
           <div>
-            <p className="text-sm font-medium text-indigo-600">HOTMART RECOVERY</p>
+            <p className="text-sm font-medium text-indigo-600">
+              CENTRAL DE PERFORMANCE
+            </p>
             <h1 className="text-2xl font-semibold">Entrar no painel</h1>
           </div>
         </div>

@@ -28,7 +28,7 @@ export default async function DashboardPage({
     <>
       <PageHeader
         eyebrow="Visão geral"
-        title="Recuperação Hotmart"
+        title="Central de Performance"
         description="Métricas calculadas somente a partir de purchase_journeys e recovery_email_logs. Nenhuma taxa de abertura ou clique é estimada."
       >
         <PeriodFilter current={period} basePath="/dashboard" />

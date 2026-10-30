@@ -1,8 +1,8 @@
-# Hotmart Recovery Engine — Portfolio Edition
+# Central de Performance — Portfolio Edition
 
 [Português (Brasil)](README.pt-BR.md) · English
 
-> A publication-safe, isolated edition of an automated purchase-recovery system. The live project was not edited, restarted, redeployed, queried, or connected to while this repository was prepared.
+> A publication-safe, isolated edition of Central de Performance, an automated purchase-recovery and operational-visibility system integrated with Hotmart events. The live project was not edited, restarted, redeployed, queried, or connected to while this repository was prepared.
 
 ## What this project demonstrates
 
